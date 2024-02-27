@@ -1,0 +1,36 @@
+[tool.poetry]
+name = "url-shortener-fastapi"
+version = "0.1.0"
+description = ""
+authors = ["glebmashanov <njyrbqckfsq@gmail.com>"]
+readme = "README.md"
+packages = [{include = "url_shortener_fastapi"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.109.2"
+uvicorn = "^0.27.1"
+psycopg2-binary = "^2.9.9"
+asyncpg = "^0.29.0"
+alembic = "^1.13.1"
+sqlalchemy = {extras = ["asyncio"], version = "^2.0.25"}
+pydantic-settings = "^2.1.0"
+fastapi-pagination = "^0.12.15"
+passlib = "^1.7.4"
+python-jose = "^3.3.0"
+python-multipart = "^0.0.9"
+loguru = "^0.7.2"
+fastapi-cache2 = {extras = ["memcache"], version = "^0.2.1"}
+
+[tool.ruff]
+exclude = [".git", "__pycache__", ".idea",".venv"]
+line-length = 120
+
+[tool.isort]
+multi_line_output = "3"
+length_sort = true
+reverse_sort = "1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
