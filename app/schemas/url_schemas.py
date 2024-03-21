@@ -14,6 +14,16 @@ class CreateURLRequestSchema(BaseModel):
         return str(value)
 
 
+class CreateURLResponsetSchema(BaseModel):
+    id: int
+    slug: str
+    original_url: HttpUrl
+    visits: int
+    last_visit_at: datetime
+    created_at: datetime
+    updated_at: datetime
+
+
 class ListURLResponseSchema(BaseModel):
     id: int
     slug: str

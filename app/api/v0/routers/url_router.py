@@ -1,10 +1,8 @@
-from loguru import logger
-
 from app.core.dependencies import get_postgres_session
 from app.models.url_models import URLModel
 from app.schemas.url_schemas import (
     CreateURLRequestSchema,
-    ListURLResponseSchema,
+    CreateURLResponsetSchema, ListURLResponseSchema,
     UpdateURLRequestSchema,
 )
 from fastapi import APIRouter, Body, Depends, HTTPException
@@ -26,7 +24,7 @@ async def get_short_urls(
     return await paginate(postgres_session, select(URLModel).order_by(URLModel.created_at))
 
 
-@router.post("/", status_code=status.HTTP_201_CREATED)
+@router.post("/", response_model=CreateURLResponsetSchema, status_code=status.HTTP_201_CREATED)
 async def create_short_url(
     data: CreateURLRequestSchema = Body(...),
     postgres_session: AsyncSession = Depends(get_postgres_session),
@@ -57,7 +55,7 @@ async def create_short_url(
 async def delete_short_url(
     id: int = Path(...),
     postgres_session: AsyncSession = Depends(get_postgres_session),
-):
+) -> None:
     stmt = select(URLModel).where(URLModel.id == id)
     result = await postgres_session.execute(stmt)
     url = result.scalars().first()
@@ -82,8 +80,7 @@ async def patch_short_url(
     id: int = Path(...),
     data: UpdateURLRequestSchema = Body(...),
     postgres_session: AsyncSession = Depends(get_postgres_session),
-):
-    slug = None
+) -> None:
     cleared_data = data.dict(exclude_unset=True)
 
     if not cleared_data:
@@ -118,5 +115,4 @@ async def patch_short_url(
     await postgres_session.flush()
 
     prefix = FastAPICache.get_prefix()
-
-    res = await FastAPICache.clear(key=f"{prefix}:{slug}")
+    await FastAPICache.clear(key=f"{prefix}:{slug}")
