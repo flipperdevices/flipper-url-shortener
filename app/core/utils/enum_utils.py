@@ -9,9 +9,3 @@ class BaseEnum(Enum):
     @lru_cache(None)
     def values(cls) -> tuple:
         return tuple(map(attrgetter('value'), cls))
-
-
-# class TaskStatusEnum(BaseEnum):
-#     SUCCEEDED = 'succeeded'
-#     FAILED = 'failed'
-#     IN_PROGRESS = 'in-progress'

@@ -16,14 +16,11 @@ alembic = "^1.13.1"
 sqlalchemy = {extras = ["asyncio"], version = "^2.0.25"}
 pydantic-settings = "^2.1.0"
 fastapi-pagination = "^0.12.15"
-passlib = "^1.7.4"
-python-jose = "^3.3.0"
-python-multipart = "^0.0.9"
 loguru = "^0.7.2"
-fastapi-cache2 = {extras = ["memcache"], version = "^0.2.1"}
+fastapi-cache2 = "^0.2.1"
 
 [tool.ruff]
-exclude = [".git", "__pycache__", ".idea",".venv"]
+exclude = [".git", "__pycache__", ".idea", ".venv"]
 line-length = 120
 
 [tool.isort]

@@ -10,10 +10,7 @@ class URLModel(BaseModel):
     __tablename__ = 'urls'
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    domain: Mapped[str] = mapped_column(String, index=True)
-    slug: Mapped[str] = mapped_column(String, index=True)
-
-    short_url: Mapped[str] = mapped_column(String, unique=True, index=True)
+    slug: Mapped[str] = mapped_column(String, unique=True, index=True)
     original_url: Mapped[str] = mapped_column(String, index=True)
 
     visits: Mapped[int] = mapped_column(Integer, default=0)

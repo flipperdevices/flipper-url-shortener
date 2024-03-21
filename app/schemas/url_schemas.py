@@ -5,7 +5,6 @@ from pydantic import BaseModel, HttpUrl, field_validator
 
 
 class CreateURLRequestSchema(BaseModel):
-    domain: str = Body(..., min_length=1)
     slug: str = Body(..., min_length=1)
     original_url: HttpUrl
 
@@ -17,9 +16,7 @@ class CreateURLRequestSchema(BaseModel):
 
 class ListURLResponseSchema(BaseModel):
     id: int
-    domain: str
     slug: str
-    short_url: HttpUrl
     original_url: HttpUrl
     visits: int
     last_visit_at: datetime
@@ -28,7 +25,6 @@ class ListURLResponseSchema(BaseModel):
 
 
 class UpdateURLRequestSchema(BaseModel):
-    domain: str = Body(None, min_length=1)
     slug: str = Body(None, min_length=1)
     original_url: HttpUrl = Body(None)
 

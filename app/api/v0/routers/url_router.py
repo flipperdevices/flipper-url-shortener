@@ -1,5 +1,6 @@
-from app.core.dependencies import get_current_user, get_postgres_session
-from app.models import UserModel
+from loguru import logger
+
+from app.core.dependencies import get_postgres_session
 from app.models.url_models import URLModel
 from app.schemas.url_schemas import (
     CreateURLRequestSchema,
@@ -20,7 +21,6 @@ router = APIRouter()
 
 @router.get("/", response_model=Page[ListURLResponseSchema], status_code=status.HTTP_200_OK)
 async def get_short_urls(
-    user: UserModel = Depends(get_current_user),
     postgres_session: AsyncSession = Depends(get_postgres_session),
 ):
     return await paginate(postgres_session, select(URLModel).order_by(URLModel.created_at))
@@ -29,23 +29,20 @@ async def get_short_urls(
 @router.post("/", status_code=status.HTTP_201_CREATED)
 async def create_short_url(
     data: CreateURLRequestSchema = Body(...),
-    user: UserModel = Depends(get_current_user),
     postgres_session: AsyncSession = Depends(get_postgres_session),
 ):
-    stmt = select(URLModel).where(URLModel.domain == data.domain, URLModel.slug == data.slug)
+    stmt = select(URLModel).where(URLModel.slug == data.slug)
     result = await postgres_session.execute(stmt)
     url = result.scalars().first()
 
     if url:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="The URL with this domain and slug already exists",
+            detail="The URL with this slug already exists",
         )
 
     url_model = URLModel(
         slug=data.slug,
-        domain=data.domain,
-        short_url=f'https://{data.domain}/{data.slug}',
         original_url=data.original_url,
     )
 
@@ -59,34 +56,34 @@ async def create_short_url(
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_short_url(
     id: int = Path(...),
-    user: UserModel = Depends(get_current_user),
     postgres_session: AsyncSession = Depends(get_postgres_session),
 ):
     stmt = select(URLModel).where(URLModel.id == id)
     result = await postgres_session.execute(stmt)
     url = result.scalars().first()
-    short_url = url.short_url
+
     if not url:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="The URL with this id not found",
         )
 
+    slug = url.slug
+
     await postgres_session.delete(url)
     await postgres_session.flush()
 
     prefix = FastAPICache.get_prefix()
-    await FastAPICache.clear(key=f"{prefix}:{short_url}")
+    await FastAPICache.clear(key=f"{prefix}:{slug}")
 
 
 @router.patch("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 async def patch_short_url(
     id: int = Path(...),
     data: UpdateURLRequestSchema = Body(...),
-    user: UserModel = Depends(get_current_user),
     postgres_session: AsyncSession = Depends(get_postgres_session),
 ):
-    short_url = None
+    slug = None
     cleared_data = data.dict(exclude_unset=True)
 
     if not cleared_data:
@@ -105,12 +102,10 @@ async def patch_short_url(
             detail="The URL with this id not found",
         )
 
-    domain = cleared_data.get('domain') or url.domain
     slug = cleared_data.get('slug') or url.slug
-    short_url = f'https://{domain}/{slug}'
 
-    if data.domain or data.slug:
-        stmt = select(URLModel).where(URLModel.domain == domain, URLModel.slug == slug)
+    if data.slug:
+        stmt = select(URLModel).where(URLModel.slug == slug)
         result = await postgres_session.execute(stmt)
         if result.scalars().first():
             raise HTTPException(
@@ -118,11 +113,10 @@ async def patch_short_url(
                 detail="The URL with this domain and slug already exists",
             )
 
-        cleared_data['short_url'] = short_url
-
     query = update(URLModel).where(URLModel.id == id).values(**cleared_data)
     await postgres_session.execute(query)
     await postgres_session.flush()
 
     prefix = FastAPICache.get_prefix()
-    await FastAPICache.clear(key=f"{prefix}:{short_url}")
+
+    res = await FastAPICache.clear(key=f"{prefix}:{slug}")

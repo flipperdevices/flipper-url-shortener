@@ -1,7 +1,6 @@
 from typing import Optional
 
 from fastapi_cache.backends.memcached import MemcachedBackend
-from loguru import logger
 
 
 class CustomMemcachedBackend(MemcachedBackend):

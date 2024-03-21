@@ -15,18 +15,6 @@ services:
       timeout: 2s
       retries: 5
 
-  memcached:
-    container_name: memcached
-    image: memcached:1.6-alpine
-    restart: always
-    ports:
-      - '11212:11212'
-    healthcheck:
-      test: [ "CMD", "nc","-z","127.0.0.1","11211"]
-      interval: 5s
-      timeout: 2s
-      retries: 5
-
   backend:
     restart: always
     build:
@@ -38,8 +26,6 @@ services:
       - ./entrypoint.sh
     depends_on:
       postgres:
-        condition: service_healthy
-      memcached:
         condition: service_healthy
     ports:
       - '8000:8000'
