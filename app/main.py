@@ -16,6 +16,7 @@ async def lifespan(application: FastAPI):
         backend=InMemoryBackend(),
         prefix="fastapi-cache",
         enable=application_settings.CACHE_ACTIVE,
+        expire=application_settings.CACHE_EXPIRE_TIME
     )
     yield
 

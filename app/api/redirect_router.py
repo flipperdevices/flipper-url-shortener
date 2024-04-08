@@ -1,7 +1,7 @@
+from app.core.cache.decorators import cache_visits
 from app.core.cache.key_builders import short_url_key_builder
 from app.core.dependencies import get_postgres_session
 from app.models.url_models import URLModel
-from app.tasks.url_tasks import url_visit_task
 from fastapi import (
     APIRouter,
     BackgroundTasks,
@@ -11,7 +11,6 @@ from fastapi import (
     HTTPException,
     Path,
 )
-from fastapi_cache.decorator import cache
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
@@ -33,9 +32,8 @@ router = APIRouter(
 
 
 @router.get("/{slug:path}", response_class=RedirectResponse)
-@cache(key_builder=short_url_key_builder)
+@cache_visits(key_builder=short_url_key_builder)
 async def redirect_by_short_url(
-    worker: BackgroundTasks,
     slug: str = Path(...),
     postgres_session: AsyncSession = Depends(get_postgres_session),
 ) -> str:
@@ -44,7 +42,6 @@ async def redirect_by_short_url(
     url = result.scalars().first()
 
     if url:
-        worker.add_task(url_visit_task, slug=slug)
         return url.original_url
 
     raise HTTPException(
