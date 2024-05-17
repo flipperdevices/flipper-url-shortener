@@ -1,4 +1,4 @@
-from typing import  Optional
+from typing import Optional
 
 from fastapi_cache import FastAPICache
 from starlette.requests import Request
@@ -13,11 +13,11 @@ def short_url_key_builder(
     *args,
     **kwargs,
 ):
-    if not kwargs['kwargs'].get('slug'):
-        raise ValueError('Your endpoint must have a slug key word argument')
+    if not kwargs["kwargs"].get("slug"):
+        raise ValueError("Your endpoint must have a slug key word argument")
 
     prefix = FastAPICache.get_prefix()
-    slug = kwargs['kwargs']['slug']
+    slug = kwargs["kwargs"]["slug"]
 
     cache_key = f"{prefix}:{slug}"
     return cache_key

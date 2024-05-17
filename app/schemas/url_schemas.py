@@ -8,7 +8,7 @@ class CreateURLRequestSchema(BaseModel):
     slug: str = Body(..., min_length=1)
     original_url: HttpUrl
 
-    @field_validator('original_url')
+    @field_validator("original_url")
     @classmethod
     def convert_int_serial(cls, value: HttpUrl):
         return str(value)
@@ -38,7 +38,7 @@ class UpdateURLRequestSchema(BaseModel):
     slug: str = Body(None, min_length=1)
     original_url: HttpUrl = Body(None)
 
-    @field_validator('original_url')
+    @field_validator("original_url")
     @classmethod
     def convert_int_serial(cls, value: HttpUrl):
         return str(value)
