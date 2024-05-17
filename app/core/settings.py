@@ -17,6 +17,7 @@ class ApplicationSettings(BaseConfigSettings):
     POSTGRES_URL: str = Field('postgresql+asyncpg://user:password@postgres/postgres')
 
     CACHE_ACTIVE: bool = Field(True)
+    CACHE_EXPIRE_TIME: int = Field(999999999999)
 
 
 application_settings = ApplicationSettings()
