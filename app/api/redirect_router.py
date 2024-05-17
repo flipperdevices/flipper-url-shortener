@@ -34,7 +34,7 @@ router = APIRouter(
 @router.get("/{slug:path}", response_class=RedirectResponse)
 @cache_visits(key_builder=short_url_key_builder)
 async def redirect_by_short_url(
-    slug: str = Path(...),
+    slug: str = Path(..., min_length=1),
     postgres_session: AsyncSession = Depends(get_postgres_session),
 ) -> str:
     stmt = select(URLModel).where(URLModel.slug == slug)
