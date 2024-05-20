@@ -222,7 +222,7 @@ import axios from 'axios'
 import showNotif from 'composables/useShowNotif'
 import LinkItem from 'components/LinkItem.vue'
 
-const API_ENDPOINT = process.env.API_ENDPOINT || `${location.origin}${location.pathname}/api/v0/`
+const API_ENDPOINT = `${location.origin}${location.pathname}${process.env.API_PATH || '/api/v0'}`
 const SHORTENED_URL_BASE_PATH = process.env.SHORTENED_URL_BASE_PATH
 
 const localStore = (key, value) => {

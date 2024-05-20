@@ -64,7 +64,7 @@ module.exports = configure(function (/* ctx */) {
       },
 
       env: {
-        API_ENDPOINT: process.env.API_ENDPOINT,
+        API_PATH: process.env.API_PATH,
         SHORTENED_URL_BASE_PATH: process.env.SHORTENED_URL_BASE_PATH
       },
 
