@@ -2,7 +2,8 @@ from app.core.dependencies import get_postgres_session
 from app.models.url_models import URLModel
 from app.schemas.url_schemas import (
     CreateURLRequestSchema,
-    CreateURLResponsetSchema, ListURLResponseSchema,
+    CreateURLResponsetSchema,
+    ListURLResponseSchema,
     UpdateURLRequestSchema,
 )
 from fastapi import APIRouter, Body, Depends, HTTPException
@@ -17,14 +18,20 @@ from starlette import status
 router = APIRouter()
 
 
-@router.get("/", response_model=Page[ListURLResponseSchema], status_code=status.HTTP_200_OK)
+@router.get(
+    "/", response_model=Page[ListURLResponseSchema], status_code=status.HTTP_200_OK
+)
 async def get_short_urls(
     postgres_session: AsyncSession = Depends(get_postgres_session),
 ):
-    return await paginate(postgres_session, select(URLModel).order_by(URLModel.created_at))
+    return await paginate(
+        postgres_session, select(URLModel).order_by(URLModel.created_at)
+    )
 
 
-@router.post("/", response_model=CreateURLResponsetSchema, status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/", response_model=CreateURLResponsetSchema, status_code=status.HTTP_201_CREATED
+)
 async def create_short_url(
     data: CreateURLRequestSchema = Body(...),
     postgres_session: AsyncSession = Depends(get_postgres_session),
@@ -99,7 +106,7 @@ async def patch_short_url(
             detail="The URL with this id not found",
         )
 
-    slug = cleared_data.get('slug') or url.slug
+    slug = cleared_data.get("slug") or url.slug
 
     if data.slug:
         stmt = select(URLModel).where(URLModel.slug == slug)

@@ -11,6 +11,6 @@ async def get_postgres_session() -> AsyncSession:
                 await session.commit()
             except SQLAlchemyError as exc:
                 await session.rollback()
-                raise Exception(f'Database error. Detail: {exc.__str__}')
+                raise Exception(f"Database error. Detail: {exc.__str__}")
             finally:
                 await session.close()

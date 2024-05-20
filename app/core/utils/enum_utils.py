@@ -8,4 +8,4 @@ class BaseEnum(Enum):
     @classmethod
     @lru_cache(None)
     def values(cls) -> tuple:
-        return tuple(map(attrgetter('value'), cls))
+        return tuple(map(attrgetter("value"), cls))

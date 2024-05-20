@@ -7,7 +7,7 @@ from sqlalchemy.sql import func
 
 
 class URLModel(BaseModel):
-    __tablename__ = 'urls'
+    __tablename__ = "urls"
 
     id: Mapped[int] = mapped_column(primary_key=True)
     slug: Mapped[str] = mapped_column(String, unique=True, index=True)
@@ -17,4 +17,6 @@ class URLModel(BaseModel):
     last_visit_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
 
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
-    updated_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now(), server_onupdate=func.now())
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime, server_default=func.now(), server_onupdate=func.now()
+    )
