@@ -78,6 +78,14 @@
         </template>
       </q-table>
     </template>
+    <q-btn
+      v-else
+      unelevated
+      icon="mdi-plus"
+      label="New redirect"
+      color="primary"
+      @click="initNewURL(); addURLDialog = true"
+    />
 
     <q-dialog v-model="addURLDialog">
       <q-card class="dialog">
