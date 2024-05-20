@@ -54,6 +54,8 @@ module.exports = configure(function (/* ctx */) {
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#build
     build: {
+      publicPath: process.env.APP_PATH,
+
       alias: {
         composables: path.join(__dirname, './src/composables')
       },
