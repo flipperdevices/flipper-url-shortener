@@ -231,7 +231,7 @@ import showNotif from 'composables/useShowNotif'
 import LinkItem from 'components/LinkItem.vue'
 
 const API_ENDPOINT = `${location.origin}${process.env.API_PATH || '/api/v0'}`
-const SHORTENED_URL_BASE_PATH = process.env.SHORTENED_URL_BASE_PATH
+const SHORTENED_URL_BASE_PATH = process.env.SHORTENED_URL_BASE_PATH || `${location.origin}/`
 
 const localStore = (key, value) => {
   localStorage.setItem(key, value)
