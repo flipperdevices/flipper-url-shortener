@@ -1,8 +1,8 @@
 import os
 from contextlib import asynccontextmanager
-from fastapi.staticfiles import StaticFiles
 from fastapi_cache.backends.inmemory import InMemoryBackend
 from app.api import router as api_router
+from app.static import router as static_router
 from app.api.redirect_router import router as redirect_router
 from app.core.settings import application_settings
 from fastapi import FastAPI
@@ -40,13 +40,7 @@ app = FastAPI(
         ),
     ],
 )
+app.mount("/admin", static_router)
 app.include_router(api_router)
-app.mount(
-    "/admin",
-    StaticFiles(
-        directory=os.path.join(os.path.dirname(__file__), "../static"), html=True
-    ),
-    name="static",
-)
 app.include_router(redirect_router)
 add_pagination(app)
