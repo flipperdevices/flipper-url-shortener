@@ -1,3 +1,4 @@
+from app.core.settings import application_settings
 from app.core.cache.decorators import cache_visits
 from app.core.cache.key_builders import short_url_key_builder
 from app.core.dependencies import get_postgres_session
@@ -29,6 +30,19 @@ router = APIRouter(
         },
     },
 )
+
+
+@router.get("/", response_class=RedirectResponse)
+async def redirect_root() -> str:
+    root_url = application_settings.ROOT_REDIRECT_URL
+
+    if root_url:
+        return root_url
+
+    raise HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail="The URL not found",
+    )
 
 
 @router.get("/{slug:path}", response_class=RedirectResponse)

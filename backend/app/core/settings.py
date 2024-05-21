@@ -14,7 +14,8 @@ class ApplicationSettings(BaseConfigSettings):
     APP_DEBUG: bool = Field(False)
     APP_API_VERSION_STR: str = Field("v0")
 
-    POSTGRES_URL: str = Field("postgresql+asyncpg://user:password@postgres/postgres")
+    POSTGRES_URL: str = Field()
+    ROOT_REDIRECT_URL: str | None = Field(None)
 
     CACHE_ACTIVE: bool = Field(True)
     CACHE_EXPIRE_TIME: int = Field(999999999999)
