@@ -1,8 +1,8 @@
 import os
 from contextlib import asynccontextmanager
 from fastapi_cache.backends.inmemory import InMemoryBackend
+from fastapi.staticfiles import StaticFiles
 from app.api import router as api_router
-from app.static import router as static_router
 from app.api.redirect_router import router as redirect_router
 from app.core.settings import application_settings
 from fastapi import FastAPI
@@ -10,6 +10,7 @@ from fastapi_cache import FastAPICache
 from fastapi_pagination import add_pagination
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware import Middleware
+from starlette.responses import RedirectResponse
 
 
 @asynccontextmanager
@@ -40,7 +41,20 @@ app = FastAPI(
         ),
     ],
 )
-app.mount("/admin", static_router)
+
+
+@app.get("/admin")
+async def admin_trailing_slash():
+    return RedirectResponse("/admin/")
+
+
+app.mount(
+    "/admin",
+    StaticFiles(
+        directory=os.path.join(os.path.dirname(__file__), "../static"), html=True
+    ),
+    name="static",
+)
 app.include_router(api_router)
 app.include_router(redirect_router)
 add_pagination(app)
