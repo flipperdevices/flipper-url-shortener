@@ -251,7 +251,7 @@ const columns = [
 const isCellEllipsis = ref(false)
 const formattedDateTime = computed(() => (timestamp) => {
   const date = new Date(timestamp)
-  return `${date.toLocaleDateString('nu').replaceAll('/', '.')} ${date.toLocaleTimeString('nu', { hour: 'numeric', minute: 'numeric' })}`
+  return `${String(date.getDate()).padStart(2, '0')}.${String(date.getMonth() + 1).padStart(2, '0')}.${date.getFullYear()} ${date.toLocaleTimeString('nu', { hour: 'numeric', minute: 'numeric' })}`
 })
 
 // get items
