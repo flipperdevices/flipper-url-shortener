@@ -1,17 +1,68 @@
-### start backend
-```bash
-docker-compose up --build
-docker-compose -f docker-compose.yaml exec backend alembic --config app/alembic.ini upgrade head
+# About
+This is a public repository of Flipper URL Shortener created using Python and Vue.js
+
+### **THERE IS NO AUTHORIZATION OR OTHER SECURITY** 
+
+# Getting started
+
+### Requirements
+- Docker
+- PostgresSQL
+
+### Environment variables
+Backend:
+- APP_TITLE: string = URL Shortener
+- APP_VERSION: string = 0.1.0
+- APP_DEBUG: boolean = False
+- APP_API_VERSION_STR: string = v0
+- APP_OPENAPI_URL: string = /api/openapi.json **to disable API documentation set value to empty string \' \'**
+- POSTGRES_URL: string = **REQUIRED**
+- ROOT_REDIRECT_URL: string | None = None
+- CACHE_ACTIVE: boolean = True
+- CACHE_EXPIRE_TIME: int = 999999999999
+
+Frontend:
+- APP_PATH: string = /admin
+- API_PATH: string = /api/v0/
+- SHORTENED_URL_BASE_PATH: string = https://r.example.com/
+
+See `frontend/.env.example` for more description
+
+### Start application
+```
+docker build -t test .
 ```
 
-### start frontend
-```bash
-cd frontend/
-npm i
-npm run dev
+```
+docker run --rm -it -p 8080:80 --net test -e POSTGRES_URL=postgresql+asyncpg://user:password@hostname/database test
 ```
 
-### build frontend
-```bash
-npm run build
-```
+Visit `http://127.0.0.1:8080/admin`
+
+# Backend
+
+### Main stack
+- Python3.11
+- FastAPI
+- SQLAlchemy
+- Alembic
+- FastAPI-cache2
+- FastAPI-pagination
+- Uvicorn
+
+### API Documentation
+Visit `/api/docs#/` - добавить чтобы отключить
+
+### Security
+There is no security, you have to protect your `/admin` and `/api` additionally
+
+### Cache
+**Only redirect router is cached**  
+
+As a cache backend we use `InMemoryBackend`, you can easily change it in the `backend/main.py`, see [package documentation](https://github.com/long2ice/fastapi-cache)
+
+We have a custom `@cache_visits` decorator which works as usual but create a background task to increase visits count in the database
+
+Also, we have a custom cache builder which creates a cache key from the request slug `{prefix}:{slug}`
+
+Cache invalidation on short url update and delete by cache key

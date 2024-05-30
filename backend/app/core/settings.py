@@ -13,6 +13,7 @@ class ApplicationSettings(BaseConfigSettings):
     APP_VERSION: str = Field("0.1.0")
     APP_DEBUG: bool = Field(False)
     APP_API_VERSION_STR: str = Field("v0")
+    APP_OPENAPI_URL: str = Field("/api/openapi.json")
 
     POSTGRES_URL: str = Field()
     ROOT_REDIRECT_URL: str | None = Field(None)

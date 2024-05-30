@@ -7,6 +7,7 @@ RUN npm run build
 FROM python:3.11-alpine
 LABEL org.opencontainers.image.source=https://github.com/flipperdevices/flipper-url-shortener
 MAINTAINER devops@flipperdevices.com
+RUN apk add --no-cache curl gcc libffi-dev musl-dev
 RUN apk add --no-cache curl
 COPY backend/pyproject.toml backend/poetry.lock /app/
 WORKDIR /app

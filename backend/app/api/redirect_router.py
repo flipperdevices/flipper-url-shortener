@@ -2,7 +2,7 @@ from app.core.settings import application_settings
 from app.core.cache.decorators import cache_visits
 from app.core.cache.key_builders import short_url_key_builder
 from app.core.dependencies import get_postgres_session
-from app.models.url_models import URLModel
+from app.models.url_models import UrlModel
 from fastapi import (
     APIRouter,
     BackgroundTasks,
@@ -51,7 +51,7 @@ async def redirect_by_short_url(
     slug: str = Path(..., min_length=1),
     postgres_session: AsyncSession = Depends(get_postgres_session),
 ) -> str:
-    stmt = select(URLModel).where(URLModel.slug == slug)
+    stmt = select(UrlModel).where(UrlModel.slug == slug)
     result = await postgres_session.execute(stmt)
     url = result.scalars().first()
 
