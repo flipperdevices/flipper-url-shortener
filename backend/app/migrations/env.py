@@ -1,13 +1,14 @@
 import asyncio
-import os
 import sys
+import os
 from logging.config import fileConfig
 
+from sqlalchemy.ext.asyncio import AsyncEngine
+from sqlalchemy import engine_from_config, pool
 from alembic import context
+
 from app.core.settings import application_settings
 from app.models import Base
-from sqlalchemy import engine_from_config, pool
-from sqlalchemy.ext.asyncio import AsyncEngine
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.getcwd())

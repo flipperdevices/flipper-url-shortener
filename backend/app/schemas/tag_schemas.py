@@ -1,7 +1,7 @@
 from datetime import datetime
 
-from fastapi import Body
 from pydantic import BaseModel
+from fastapi import Body
 
 
 class CreateTagRequestSchema(BaseModel):

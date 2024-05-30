@@ -1,7 +1,7 @@
 from datetime import datetime
 
+from pydantic import field_validator, BaseModel, HttpUrl
 from fastapi import Body
-from pydantic import BaseModel, HttpUrl, field_validator
 
 
 class CreateUrlRequestSchema(BaseModel):

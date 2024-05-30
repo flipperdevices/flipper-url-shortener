@@ -1,8 +1,9 @@
 from datetime import datetime
 
+from sqlalchemy import select
+
 from app.core.postgres.db import PostgresAsyncSession
 from app.models import UrlModel
-from sqlalchemy import select
 
 
 async def url_visit_task(slug: str):

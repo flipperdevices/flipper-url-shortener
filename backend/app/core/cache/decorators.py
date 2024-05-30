@@ -1,9 +1,9 @@
-import asyncio
-import inspect
 import logging
+import inspect
+import asyncio
 import sys
 from functools import wraps
-from typing import Any, Awaitable, Callable, Optional, Type, TypeVar
+from typing import Awaitable, Optional, Callable, TypeVar, Type, Any
 
 from app.tasks.url_tasks import url_visit_task
 
@@ -12,12 +12,11 @@ if sys.version_info >= (3, 10):
 else:
     from typing_extensions import ParamSpec
 
+from starlette.responses import Response
+from fastapi_cache.coder import Coder
 from fastapi.concurrency import run_in_threadpool
 from starlette.requests import Request
-from starlette.responses import Response
-
 from fastapi_cache import FastAPICache
-from fastapi_cache.coder import Coder
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
@@ -44,19 +43,11 @@ def cache_visits(
     def wrapper(func: Callable[P, Awaitable[R]]) -> Callable[P, Awaitable[R]]:
         signature = inspect.signature(func)
         request_param = next(
-            (
-                param
-                for param in signature.parameters.values()
-                if param.annotation is Request
-            ),
+            (param for param in signature.parameters.values() if param.annotation is Request),
             None,
         )
         response_param = next(
-            (
-                param
-                for param in signature.parameters.values()
-                if param.annotation is Response
-            ),
+            (param for param in signature.parameters.values() if param.annotation is Response),
             None,
         )
         parameters = []
@@ -117,8 +108,7 @@ def cache_visits(
             request: Optional[Request] = copy_kwargs.pop("request", None)
             response: Optional[Response] = copy_kwargs.pop("response", None)
             if (
-                request
-                and request.headers.get("Cache-Control") in ("no-store", "no-cache")
+                request and request.headers.get("Cache-Control") in ("no-store", "no-cache")
             ) or not FastAPICache.get_enable():
                 return await ensure_async_func(*args, **kwargs)
 
@@ -189,9 +179,7 @@ def cache_visits(
             try:
                 await backend.set(cache_key, encoded_ret, expire)
             except Exception:
-                logger.warning(
-                    f"Error setting cache key '{cache_key}' in backend:", exc_info=True
-                )
+                logger.warning(f"Error setting cache key '{cache_key}' in backend:", exc_info=True)
 
             response.headers["Cache-Control"] = f"max-age={expire}"
             etag = f"W/{hash(encoded_ret)}"

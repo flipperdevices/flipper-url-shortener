@@ -1,6 +1,6 @@
-from enum import Enum, unique
 from functools import lru_cache
 from operator import attrgetter
+from enum import unique, Enum
 
 
 @unique

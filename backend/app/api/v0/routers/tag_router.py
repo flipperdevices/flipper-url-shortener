@@ -1,23 +1,24 @@
-from app.core.dependencies import get_postgres_session
-from app.models.tag_models import TagModel
-
-from fastapi import APIRouter, Body, Depends, HTTPException
-from fastapi.params import Path, Query
-from fastapi_pagination import Page
 from fastapi_pagination.ext.async_sqlalchemy import paginate
-from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi_pagination import Page
+from fastapi.params import Query, Path
+from sqlalchemy import update, select
 from starlette import status
+from fastapi import HTTPException, APIRouter, Depends, Body
 
-from app.schemas.tag_schemas import CreateTagRequestSchema, CreateTagResponseSchema, ListTagResponseSchema, \
-    UpdateTagRequestSchema
+from app.schemas.tag_schemas import (
+    CreateTagResponseSchema,
+    UpdateTagRequestSchema,
+    CreateTagRequestSchema,
+    ListTagResponseSchema,
+)
+from app.models.tag_models import TagModel
+from app.core.dependencies import get_postgres_session
 
 router = APIRouter()
 
 
-@router.get(
-    "/", response_model=Page[ListTagResponseSchema], status_code=status.HTTP_200_OK
-)
+@router.get("/", response_model=Page[ListTagResponseSchema], status_code=status.HTTP_200_OK)
 async def get_tags(
     query: str = Query(None, min_length=1, max_length=150),
     postgres_session: AsyncSession = Depends(get_postgres_session),
@@ -26,14 +27,10 @@ async def get_tags(
     if query:
         select_stmt = select_stmt.where(TagModel.name.ilike(f'%{query}%'))
 
-    return await paginate(
-        postgres_session, select_stmt.order_by(TagModel.created_at)
-    )
+    return await paginate(postgres_session, select_stmt.order_by(TagModel.created_at))
 
 
-@router.post(
-    "/", response_model=CreateTagResponseSchema, status_code=status.HTTP_201_CREATED
-)
+@router.post("/", response_model=CreateTagResponseSchema, status_code=status.HTTP_201_CREATED)
 async def create_tag_url(
     data: CreateTagRequestSchema = Body(...),
     postgres_session: AsyncSession = Depends(get_postgres_session),

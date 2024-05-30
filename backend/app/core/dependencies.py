@@ -1,6 +1,7 @@
-from app.core.postgres.db import PostgresAsyncSession
-from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.exc import SQLAlchemyError
+
+from app.core.postgres.db import PostgresAsyncSession
 
 
 async def get_postgres_session() -> AsyncSession:

@@ -1,7 +1,7 @@
 # About
 This is a public repository of Flipper URL Shortener created using Python and Vue.js
 
-### **THERE IS NO AUTHORIZATION OR OTHER SECURITY** 
+### **THERE IS NO AUTHORIZATION OR OTHER SECURITY**
 
 # Getting started
 
@@ -57,7 +57,7 @@ Visit `/api/docs#/` - добавить чтобы отключить
 There is no security, you have to protect your `/admin` and `/api` additionally
 
 ### Cache
-**Only redirect router is cached**  
+**Only redirect router is cached**
 
 As a cache backend we use `InMemoryBackend`, you can easily change it in the `backend/main.py`, see [package documentation](https://github.com/long2ice/fastapi-cache)
 
