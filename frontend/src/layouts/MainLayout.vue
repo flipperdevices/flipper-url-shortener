@@ -9,7 +9,7 @@
         <div v-if="user" class="q-mr-md">
           Logged in as {{ userDisplayName }}
         </div>
-        <q-btn flat dense icon="logout" label="Log out" :href="`${location.origin}/oauth2/sign_out`" />
+        <q-btn flat dense icon="logout" label="Log out" :href="`${location.origin}/oauth2/sign_out?rd=${location.origin}/admin`" />
       </q-toolbar>
     </q-header>
     <q-page-container>
