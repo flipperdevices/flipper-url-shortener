@@ -1,11 +1,11 @@
 from datetime import datetime
 
+from pydantic import field_validator, BaseModel, HttpUrl
 from fastapi import Body
-from pydantic import BaseModel, HttpUrl, field_validator
 
 
-class CreateURLRequestSchema(BaseModel):
-    slug: str = Body(..., min_length=1)
+class CreateUrlRequestSchema(BaseModel):
+    slug: str = Body(..., min_length=1, max_length=256)
     original_url: HttpUrl
 
     @field_validator("original_url")
@@ -14,7 +14,7 @@ class CreateURLRequestSchema(BaseModel):
         return str(value)
 
 
-class CreateURLResponsetSchema(BaseModel):
+class CreateUrlResponseSchema(BaseModel):
     id: int
     slug: str
     original_url: HttpUrl
@@ -24,18 +24,28 @@ class CreateURLResponsetSchema(BaseModel):
     updated_at: datetime
 
 
-class ListURLResponseSchema(BaseModel):
+class AddTagUrlRequestSchema(BaseModel):
+    tag_ids: list[int] = Body(...)
+
+
+class AddTagUrlResponseSchema(BaseModel):
+    id: int
+    name: str
+
+
+class ListUrlResponseSchema(BaseModel):
     id: int
     slug: str
     original_url: HttpUrl
+    tags: list[AddTagUrlResponseSchema]
     visits: int
     last_visit_at: datetime
     created_at: datetime
     updated_at: datetime
 
 
-class UpdateURLRequestSchema(BaseModel):
-    slug: str = Body(None, min_length=1)
+class UpdateUrlRequestSchema(BaseModel):
+    slug: str = Body(None, min_length=1, max_length=256)
     original_url: HttpUrl = Body(None)
 
     @field_validator("original_url")

@@ -1,16 +1,18 @@
 import os
 from contextlib import asynccontextmanager
+
 from fastapi_cache.backends.inmemory import InMemoryBackend
-from fastapi.staticfiles import StaticFiles
-from app.api import router as api_router
-from app.api.redirect_router import router as redirect_router
-from app.core.settings import application_settings
-from fastapi import FastAPI
-from fastapi_cache import FastAPICache
-from fastapi_pagination import add_pagination
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware import Middleware
 from starlette.responses import RedirectResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi_pagination import add_pagination
+from fastapi_cache import FastAPICache
+from fastapi import FastAPI
+
+from app.api.redirect_router import router as redirect_router
+from app.core.settings import application_settings
+from app.api import router as api_router
 
 
 @asynccontextmanager
@@ -28,7 +30,7 @@ app = FastAPI(
     title=application_settings.APP_TITLE,
     debug=application_settings.APP_DEBUG,
     version=application_settings.APP_VERSION,
-    openapi_url="/api/openapi.json",
+    openapi_url=application_settings.APP_OPENAPI_URL,
     docs_url="/api/docs",
     lifespan=lifespan,
     middleware=[

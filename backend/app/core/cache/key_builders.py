@@ -1,8 +1,8 @@
 from typing import Optional
 
-from fastapi_cache import FastAPICache
-from starlette.requests import Request
 from starlette.responses import Response
+from starlette.requests import Request
+from fastapi_cache import FastAPICache
 
 
 def short_url_key_builder(

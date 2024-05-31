@@ -1,21 +1,14 @@
-from app.core.settings import application_settings
-from app.core.cache.decorators import cache_visits
-from app.core.cache.key_builders import short_url_key_builder
-from app.core.dependencies import get_postgres_session
-from app.models.url_models import URLModel
-from fastapi import (
-    APIRouter,
-    BackgroundTasks,
-    Body,
-    Depends,
-    Header,
-    HTTPException,
-    Path,
-)
-from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from starlette import status
 from starlette.responses import RedirectResponse
+from sqlalchemy import select
+from starlette import status
+from fastapi import HTTPException, APIRouter, Depends, Path
+
+from app.core.cache.key_builders import short_url_key_builder
+from app.core.cache.decorators import cache_visits
+from app.models.url_models import UrlModel
+from app.core.dependencies import get_postgres_session
+from app.core.settings import application_settings
 
 router = APIRouter(
     # Hide this router from the OpenAPI docs since it's not a part of
@@ -51,7 +44,7 @@ async def redirect_by_short_url(
     slug: str = Path(..., min_length=1),
     postgres_session: AsyncSession = Depends(get_postgres_session),
 ) -> str:
-    stmt = select(URLModel).where(URLModel.slug == slug)
+    stmt = select(UrlModel).where(UrlModel.slug == slug)
     result = await postgres_session.execute(stmt)
     url = result.scalars().first()
 

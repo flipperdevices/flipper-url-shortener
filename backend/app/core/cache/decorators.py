@@ -1,9 +1,9 @@
-import asyncio
-import inspect
 import logging
+import inspect
+import asyncio
 import sys
 from functools import wraps
-from typing import Any, Awaitable, Callable, Optional, Type, TypeVar
+from typing import Awaitable, Optional, Callable, TypeVar, Type, Any
 
 from app.tasks.url_tasks import url_visit_task
 
@@ -12,12 +12,11 @@ if sys.version_info >= (3, 10):
 else:
     from typing_extensions import ParamSpec
 
+from starlette.responses import Response
+from fastapi_cache.coder import Coder
 from fastapi.concurrency import run_in_threadpool
 from starlette.requests import Request
-from starlette.responses import Response
-
 from fastapi_cache import FastAPICache
-from fastapi_cache.coder import Coder
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
