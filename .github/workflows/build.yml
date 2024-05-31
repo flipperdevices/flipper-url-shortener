@@ -57,5 +57,5 @@ jobs:
         with:
           repository: ${{ secrets.INFRASTRUCTURE_REPO }}
           token: ${{ secrets.K8S_GITHUB_PAT }}
-          event-type: vpn-flipp-dev-deploy
+          event-type: flipp-dev-deploy
           client-payload: '{"image_tag": "${{steps.tag.outputs.image_tag}}"}'
