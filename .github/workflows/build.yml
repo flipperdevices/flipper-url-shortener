@@ -48,7 +48,6 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: false
-          load: true
           tags: ${{steps.tag.outputs.image_name}}:${{steps.tag.outputs.image_tag}}
           cache-from: type=registry,ref=${{ steps.tag.outputs.image_name }}:buildcache
 
