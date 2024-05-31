@@ -24,9 +24,9 @@ Backend:
 Frontend:
 - APP_PATH: string = /admin
 - API_PATH: string = /api/v0/
-- SHORTENED_URL_BASE_PATH: string = https://r.example.com/
+- SHORTENED_URL_BASE_PATH: string = `${location.origin}/`
 
-See `frontend/.env.example` for more description
+See `frontend/.env` for more description
 
 ### Start application
 ```
