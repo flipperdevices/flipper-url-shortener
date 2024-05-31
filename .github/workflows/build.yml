@@ -1,4 +1,4 @@
-name: 'Deploy'
+name: 'Build'
 
 on:
   push:
@@ -47,17 +47,15 @@ jobs:
       - name: 'Build'
         uses: docker/build-push-action@v5
         with:
-          context: .
           push: false
-          load: true
           tags: ${{steps.tag.outputs.image_name}}:${{steps.tag.outputs.image_tag}}
           cache-from: type=registry,ref=${{ steps.tag.outputs.image_name }}:buildcache
+          cache-to: type=registry,ref=${{ steps.tag.outputs.image_name }}:buildcache,mode=max
 
       - name: 'Push'
         if: ${{ github.event_name != 'pull_request' }}
         uses: docker/build-push-action@v5
         with:
-          context: .
           push: true
           tags: ${{steps.tag.outputs.image_name}}:${{steps.tag.outputs.image_tag}}
           cache-from: type=registry,ref=${{ steps.tag.outputs.image_name }}:buildcache
