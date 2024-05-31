@@ -1,3 +1,5 @@
+import re
+
 from fastapi_pagination.ext.async_sqlalchemy import paginate
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi_pagination import Page
@@ -18,23 +20,19 @@ from app.core.dependencies import get_postgres_session
 router = APIRouter()
 
 
-@router.get(
-    "/", response_model=Page[ListTagResponseSchema], status_code=status.HTTP_200_OK
-)
+@router.get("/", response_model=Page[ListTagResponseSchema], status_code=status.HTTP_200_OK)
 async def get_tags(
     query: str = Query(None, min_length=1, max_length=150),
     postgres_session: AsyncSession = Depends(get_postgres_session),
 ):
     select_stmt = select(TagModel)
     if query:
-        select_stmt = select_stmt.where(TagModel.name.ilike(f"%{query}%"))
+        select_stmt = select_stmt.where(TagModel.name.ilike(f"%{re.escape(query)}%"))
 
     return await paginate(postgres_session, select_stmt.order_by(TagModel.created_at))
 
 
-@router.post(
-    "/", response_model=CreateTagResponseSchema, status_code=status.HTTP_201_CREATED
-)
+@router.post("/", response_model=CreateTagResponseSchema, status_code=status.HTTP_201_CREATED)
 async def create_tag_url(
     data: CreateTagRequestSchema = Body(...),
     postgres_session: AsyncSession = Depends(get_postgres_session),

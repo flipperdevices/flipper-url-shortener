@@ -51,7 +51,7 @@ Visit `http://127.0.0.1:8080/admin`
 - Uvicorn
 
 ### API Documentation
-Visit `/api/docs#/` - добавить чтобы отключить
+Visit `/api/docs#/` - **to disable API documentation set value to empty string \' \'**
 
 ### Security
 There is no security, you have to protect your `/admin` and `/api` additionally
