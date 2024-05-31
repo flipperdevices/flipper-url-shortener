@@ -4,7 +4,9 @@ from fastapi_cache.backends.memcached import MemcachedBackend
 
 
 class CustomMemcachedBackend(MemcachedBackend):
-    async def clear(self, namespace: Optional[str] = None, key: Optional[str] = None) -> int:
+    async def clear(
+        self, namespace: Optional[str] = None, key: Optional[str] = None
+    ) -> int:
         if not key:
             return 0
 

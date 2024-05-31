@@ -11,6 +11,8 @@ postgres_async_engine = create_async_engine(
     echo=False,
 )
 
-PostgresAsyncSession = async_sessionmaker(postgres_async_engine, class_=AsyncSession, expire_on_commit=False)
+PostgresAsyncSession = async_sessionmaker(
+    postgres_async_engine, class_=AsyncSession, expire_on_commit=False
+)
 
 Base = declarative_base()

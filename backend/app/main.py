@@ -52,7 +52,9 @@ async def admin_trailing_slash():
 
 app.mount(
     "/admin",
-    StaticFiles(directory=os.path.join(os.path.dirname(__file__), "../static"), html=True),
+    StaticFiles(
+        directory=os.path.join(os.path.dirname(__file__), "../static"), html=True
+    ),
     name="static",
 )
 app.include_router(api_router)

@@ -17,10 +17,12 @@ class TagModel(BaseModel):
         index=True,
     )
     urls = relationship(
-        'UrlModel',
-        secondary='urls_tags',
-        back_populates='tags',
+        "UrlModel",
+        secondary="urls_tags",
+        back_populates="tags",
         viewonly=True,
     )
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
-    updated_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now(), server_onupdate=func.now())
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime, server_default=func.now(), server_onupdate=func.now()
+    )

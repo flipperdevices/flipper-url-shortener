@@ -24,25 +24,31 @@ from app.core.dependencies import get_postgres_session
 router = APIRouter()
 
 
-@router.get("/", response_model=Page[ListUrlResponseSchema], status_code=status.HTTP_200_OK)
+@router.get(
+    "/", response_model=Page[ListUrlResponseSchema], status_code=status.HTTP_200_OK
+)
 async def get_short_urls(
-    sort_by: Literal['updated_at', 'created_at', 'slug', 'original_url', 'visits', 'last_visit_at'] = Query(
-        'created_at', description="Which element to sort by"
-    ),
-    sort_order: Literal['asc', 'desc'] = Query('desc', description="Sort order"),
+    sort_by: Literal[
+        "updated_at", "created_at", "slug", "original_url", "visits", "last_visit_at"
+    ] = Query("created_at", description="Which element to sort by"),
+    sort_order: Literal["asc", "desc"] = Query("desc", description="Sort order"),
     tag_ids: list[int] = Query(None),
     postgres_session: AsyncSession = Depends(get_postgres_session),
 ):
-    order_stmt = getattr(getattr(UrlModel, sort_by, 'created_at'), sort_order, 'desc')
+    order_stmt = getattr(getattr(UrlModel, sort_by, "created_at"), sort_order, "desc")
     select_stmt = select(UrlModel).options(selectinload(UrlModel.tags))
 
     if tag_ids:
-        select_stmt = select_stmt.where(UrlModel.tags.any(UrlTagModel.tag_id.in_(tag_ids)))
+        select_stmt = select_stmt.where(
+            UrlModel.tags.any(UrlTagModel.tag_id.in_(tag_ids))
+        )
 
     return await paginate(postgres_session, select_stmt.order_by(order_stmt()))
 
 
-@router.post("/", response_model=CreateUrlResponseSchema, status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/", response_model=CreateUrlResponseSchema, status_code=status.HTTP_201_CREATED
+)
 async def create_short_url(
     data: CreateUrlRequestSchema = Body(...),
     postgres_session: AsyncSession = Depends(get_postgres_session),
@@ -97,7 +103,9 @@ async def add_tag_url(
                 detail=f"The Tag with id: {tag_id} not found",
             )
 
-        stmt = select(UrlTagModel).where(and_(UrlTagModel.url_id == id, UrlTagModel.tag_id == tag_id))
+        stmt = select(UrlTagModel).where(
+            and_(UrlTagModel.url_id == id, UrlTagModel.tag_id == tag_id)
+        )
         result = await postgres_session.execute(stmt)
         url_tag = result.scalars().first()
 
@@ -143,7 +151,9 @@ async def delete_tag_url(
                 detail=f"The Tag with id: {tag_id} not found",
             )
 
-        stmt = select(UrlTagModel).where(and_(UrlTagModel.url_id == id, UrlTagModel.tag_id == tag_id))
+        stmt = select(UrlTagModel).where(
+            and_(UrlTagModel.url_id == id, UrlTagModel.tag_id == tag_id)
+        )
         result = await postgres_session.execute(stmt)
         url_tag = result.scalars().first()
 
@@ -155,7 +165,9 @@ async def delete_tag_url(
 
         url_tags.append(url_tag.tag_id)
 
-    query = delete(UrlTagModel).where(and_(UrlTagModel.url_id == id, UrlTagModel.tag_id.in_(url_tags)))
+    query = delete(UrlTagModel).where(
+        and_(UrlTagModel.url_id == id, UrlTagModel.tag_id.in_(url_tags))
+    )
     await postgres_session.execute(query)
     await postgres_session.flush()
 

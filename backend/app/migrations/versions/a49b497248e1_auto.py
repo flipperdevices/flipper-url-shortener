@@ -32,11 +32,17 @@ def upgrade() -> None:
             server_default=sa.text("now()"),
             nullable=False,
         ),
-        sa.Column("created_at", sa.DateTime(), server_default=sa.text("now()"), nullable=False),
-        sa.Column("updated_at", sa.DateTime(), server_default=sa.text("now()"), nullable=False),
+        sa.Column(
+            "created_at", sa.DateTime(), server_default=sa.text("now()"), nullable=False
+        ),
+        sa.Column(
+            "updated_at", sa.DateTime(), server_default=sa.text("now()"), nullable=False
+        ),
         sa.PrimaryKeyConstraint("id"),
     )
-    op.create_index(op.f("ix_urls_original_url"), "urls", ["original_url"], unique=False)
+    op.create_index(
+        op.f("ix_urls_original_url"), "urls", ["original_url"], unique=False
+    )
     op.create_index(op.f("ix_urls_slug"), "urls", ["slug"], unique=True)
     # ### end Alembic commands ###
 
