@@ -1,0 +1,31 @@
+name: 'Lint'
+
+on:
+  push:
+    tags:
+      - '*'
+    branches:
+      - 'dev'
+  pull_request:
+
+env:
+  IMAGE_NAME: "flipperdevices/flipper-url-shortener"
+
+jobs:
+  lint:
+    runs-on: ubuntu-22.04
+    if: ${{ !github.event.pull_request.head.repo.fork }}
+    steps:
+      - name: 'Checkout code'
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 'Setup black'
+        run: |
+          python3 -m pip install black --upgrade;
+
+      - name: 'Lint code'
+        run: |
+          python3 -m black --check .
+
