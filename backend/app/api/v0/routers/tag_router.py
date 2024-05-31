@@ -1,3 +1,5 @@
+import re
+
 from fastapi_pagination.ext.async_sqlalchemy import paginate
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi_pagination import Page
@@ -27,7 +29,7 @@ async def get_tags(
 ):
     select_stmt = select(TagModel)
     if query:
-        select_stmt = select_stmt.where(TagModel.name.ilike(f"%{query}%"))
+        select_stmt = select_stmt.where(TagModel.name.ilike(f"%{re.escape(query)}%"))
 
     return await paginate(postgres_session, select_stmt.order_by(TagModel.created_at))
 
