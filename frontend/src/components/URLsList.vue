@@ -349,7 +349,7 @@
             @click="(val) => addTag({
               tag: val
             })"
-            @remove="deleteTag"
+            @remove="openDeleteTagDialog"
           />
           <div
             v-show="searchTagParams.pages > 1"
@@ -392,7 +392,7 @@
             clickable
             removable
             @click="addFilterTag"
-            @remove="deleteTag"
+            @remove="openDeleteTagDialog"
           />
           <div
             v-show="searchTagParams.pages > 1"
@@ -410,6 +410,23 @@
         </q-card-section>
         <q-card-actions align="right">
           <q-btn flat label="Cancel" color="primary" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+    <q-dialog v-model="dialogDeleteTag">
+      <q-card>
+        <q-card-section class="row items-center">
+          <q-avatar icon="warning" text-color="negative" size="4rem" font-size="3.5rem"/>
+          <div class="q-ml-lg">
+            <div
+              class="text-h6 q-mb-sm"
+            >Delete the tag «{{ deletableTag.name }}»</div>
+            <div>Are you sure you want to delete this tag?</div>
+          </div>
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn flat label="Keep tag" color="primary" v-close-popup />
+          <q-btn flat label="Delete tag" color="negative" @click="deleteTag(deletableTag)" v-close-popup />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -694,6 +711,12 @@ const addTag = async ({ tag, isShowNotif = true }) => {
       })
     }
   }
+}
+const dialogDeleteTag = ref(false)
+const deletableTag = ref(null)
+const openDeleteTagDialog = (tag) => {
+  dialogDeleteTag.value = true
+  deletableTag.value = tag
 }
 const deleteTag = (tag) => {
   axios.delete(new URL(`tag/${tag.id}`, API_ENDPOINT))
