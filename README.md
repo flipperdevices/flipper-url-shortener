@@ -34,10 +34,22 @@ docker build -t test .
 ```
 
 ```
-docker run --rm -it -p 8080:80 --net test -e POSTGRES_URL=postgresql+asyncpg://user:password@hostname/database test
+docker network create --driver host test
+```
+
+```
+docker run --rm -d --name postgres --net=test -e POSTGRES_USER=user -e POSTGRES_PASSWORD=password postgres:15.3-alpine
+```
+
+```
+docker run --rm -it -p 8080:80 --net test -e POSTGRES_URL=postgresql+asyncpg://user:password@hostname/ test
 ```
 
 Visit `http://127.0.0.1:8080/admin`
+
+docker run --rm -d --name postgres --net=test -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=gO0ApG9C0kCfENco postgres:15.3-alpine
+
+docker run --rm -it -p 8080:80 --net test -e POSTGRES_URL=postgresql+asyncpg://postgres:gO0ApG9C0kCfENco@postgres/ test
 
 # Backend
 

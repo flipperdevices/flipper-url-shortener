@@ -166,3 +166,7 @@ cython_debug/
 
 # Volumes
 volumes/
+
+# Environment Variable
+backend/.env
+fronted/.env
