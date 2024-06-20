@@ -777,15 +777,25 @@ const addTagsUrl = async ({ UrlId, tags, isShowNotif = true }) => {
     tag_ids: tags.map((tag) => tag.id)
   })
     .then(() => {
-      if (isShowNotif) {
-        tags.forEach(tag => {
+      const currentUrl = rows.value.find((url) => url.id === UrlId)
+      const _tags = currentUrl.tags
+
+      tags.forEach(tag => {
+        originalUrlTags.value.push(tag)
+        const tagIndex = _tags.findIndex((i) => i.id === tag.id)
+
+        if (tagIndex === -1) {
+          currentUrl.tags.push(tag)
+        }
+
+        if (isShowNotif) {
           showNotif({
             message: `Successfully added «${tag.name}» tag to URL`,
             color: 'positive',
             timeout: 1000
           })
-        })
-      }
+        }
+      })
     })
     .catch(error => {
       console.error(error)
