@@ -1,6 +1,6 @@
 import { Notify } from 'quasar'
 
-const showNotif = ({ message, color, reloadBtn }) => {
+const showNotif = ({ message, color, reloadBtn, timeout = 0 }) => {
   const actions = []
 
   if (reloadBtn) {
@@ -17,7 +17,7 @@ const showNotif = ({ message, color, reloadBtn }) => {
     color,
     textColor: 'white',
     position: 'bottom-right',
-    timeout: 0,
+    timeout,
     group: true,
     actions
   })
