@@ -37,7 +37,7 @@
                   dense
                   borderless
                   class="q-ml-sm"
-                  @update:model-value="localStore('queryParams.size', queryParams.size)"
+                  @update:model-value="changeRowsPerPage"
                 ></q-select>
               </div>
 
