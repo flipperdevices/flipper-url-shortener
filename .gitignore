@@ -169,4 +169,4 @@ volumes/
 
 # Environment Variable
 backend/.env
-fronted/.env
+frontend/.env
