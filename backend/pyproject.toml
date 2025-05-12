@@ -8,10 +8,10 @@ packages = [{include = "url_shortener_fastapi"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"
-aiohttp = "3.9.4"
+aiohttp = "3.11.18"
 idna = "3.7"
-fastapi = "^0.109.2"
-uvicorn = "^0.27.1"
+fastapi = "^0.115.12"
+uvicorn = "^0.34.2"
 psycopg2-binary = "^2.9.9"
 asyncpg = "^0.29.0"
 alembic = "^1.13.1"
