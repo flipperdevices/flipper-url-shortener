@@ -10,7 +10,7 @@ MAINTAINER devops@flipperdevices.com
 RUN apk add --no-cache curl alpine-sdk libffi-dev
 COPY backend/pyproject.toml backend/poetry.lock /app/
 WORKDIR /app
-RUN pip install poetry && poetry config virtualenvs.create false && poetry install
+RUN pip install poetry && poetry config virtualenvs.create false && poetry install --no-root --no-interaction --no-ansi
 COPY backend/app /app/app
 COPY backend/entrypoint.sh /app/
 COPY --from=frontend_builder /app_src/dist/spa /app/static
