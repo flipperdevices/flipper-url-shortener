@@ -20,6 +20,7 @@ pydantic-settings = "^2.1.0"
 fastapi-pagination = "^0.12.15"
 loguru = "^0.7.2"
 fastapi-cache2 = "^0.2.1"
+h11 = ">=0.16.0"
 
 [tool.ruff]
 exclude = [".git", "__pycache__", ".idea", ".venv"]
