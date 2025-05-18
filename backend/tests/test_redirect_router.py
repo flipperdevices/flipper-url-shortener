@@ -7,7 +7,9 @@ from app.core import settings
 @pytest.mark.asyncio
 async def test_redirect_root_success(client, monkeypatch):
     redirect_url = "http://redirect.url/path"
-    monkeypatch.setattr(settings.application_settings, "ROOT_REDIRECT_URL", redirect_url)
+    monkeypatch.setattr(
+        settings.application_settings, "ROOT_REDIRECT_URL", redirect_url
+    )
 
     response = await client.get("/")
     assert response.status_code == status.HTTP_307_TEMPORARY_REDIRECT

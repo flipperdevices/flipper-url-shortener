@@ -22,11 +22,15 @@ async def test_create_url_success(client):
 
 @pytest.mark.asyncio
 async def test_create_url_duplicate_slug(client):
-    response = await client.post("/api/v0/url/", json={"slug": "duplicate-slug", "original_url": "https://example.com"})
+    response = await client.post(
+        "/api/v0/url/",
+        json={"slug": "duplicate-slug", "original_url": "https://example.com"},
+    )
     assert response.status_code == http_status.HTTP_201_CREATED
 
     response = await client.post(
-        "/api/v0/url/", json={"slug": "duplicate-slug", "original_url": "https://another-example.com"}
+        "/api/v0/url/",
+        json={"slug": "duplicate-slug", "original_url": "https://another-example.com"},
     )
 
     assert response.status_code == http_status.HTTP_400_BAD_REQUEST
