@@ -22,6 +22,13 @@ loguru = "^0.7.2"
 fastapi-cache2 = "^0.2.1"
 h11 = ">=0.16.0"
 
+[tool.poetry.group.tests.dependencies]
+pytest = "^8.3.5"
+pytest-asyncio = "^1.0.0a1"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+
 [tool.ruff]
 exclude = [".git", "__pycache__", ".idea", ".venv"]
 line-length = 120
