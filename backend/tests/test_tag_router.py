@@ -1,8 +1,6 @@
-import pytest
 from fastapi import status as http_status
 
 
-@pytest.mark.asyncio
 async def test_create_tag_success(client):
     response = await client.post(
         "/api/v0/tag/",
@@ -17,7 +15,6 @@ async def test_create_tag_success(client):
     assert "updated_at" in data
 
 
-@pytest.mark.asyncio
 async def test_create_tag_duplicate(client):
     await client.post("/api/v0/tag/", json={"name": "dup-tag"})
 
@@ -26,7 +23,6 @@ async def test_create_tag_duplicate(client):
     assert response.json()["detail"] == "The Tag with this name already exists"
 
 
-@pytest.mark.asyncio
 async def test_get_tags(client):
     await client.post("/api/v0/tag/", json={"name": "list-tag"})
     response = await client.get("/api/v0/tag/")
@@ -37,7 +33,6 @@ async def test_get_tags(client):
     assert any(tag["name"] == "list-tag" for tag in data["items"])
 
 
-@pytest.mark.asyncio
 async def test_get_tags_query(client):
     await client.post("/api/v0/tag/", json={"name": "querytag"})
     response = await client.get("/api/v0/tag/?query=querytag")
@@ -47,7 +42,6 @@ async def test_get_tags_query(client):
     assert any(tag["name"] == "querytag" for tag in data["items"])
 
 
-@pytest.mark.asyncio
 async def test_patch_tag_success(client):
     resp = await client.post("/api/v0/tag/", json={"name": "patch-tag"})
     tag_id = resp.json()["id"]
@@ -58,13 +52,11 @@ async def test_patch_tag_success(client):
     assert any(tag["name"] == "patched-tag" for tag in tags.json()["items"])
 
 
-@pytest.mark.asyncio
 async def test_patch_tag_not_found(client):
     response = await client.patch("/api/v0/tag/99999", json={"name": "notfound"})
     assert response.status_code == http_status.HTTP_404_NOT_FOUND
 
 
-@pytest.mark.asyncio
 async def test_patch_tag_duplicate_name(client):
     await client.post("/api/v0/tag/", json={"name": "dup1"})
     resp = await client.post("/api/v0/tag/", json={"name": "dup2"})
@@ -75,7 +67,6 @@ async def test_patch_tag_duplicate_name(client):
     assert response.json()["detail"] == "The Tag with this name already exists"
 
 
-@pytest.mark.asyncio
 async def test_delete_tag_success(client):
     resp = await client.post("/api/v0/tag/", json={"name": "del-tag"})
     tag_id = resp.json()["id"]
@@ -87,7 +78,6 @@ async def test_delete_tag_success(client):
     assert not any(tag["id"] == tag_id for tag in tags.json()["items"])
 
 
-@pytest.mark.asyncio
 async def test_delete_tag_not_found(client):
     response = await client.delete("/api/v0/tag/99999")
     assert response.status_code == http_status.HTTP_404_NOT_FOUND

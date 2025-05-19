@@ -25,9 +25,6 @@ h11 = ">=0.16.0"
 [tool.poetry.group.tests.dependencies]
 pytest = "^8.3.5"
 
-[tool.pytest.ini_options]
-asyncio_mode = "auto"
-
 [tool.ruff]
 exclude = [".git", "__pycache__", ".idea", ".venv"]
 line-length = 120
