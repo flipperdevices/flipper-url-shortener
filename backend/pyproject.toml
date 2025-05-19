@@ -24,7 +24,6 @@ h11 = ">=0.16.0"
 
 [tool.poetry.group.tests.dependencies]
 pytest = "^8.3.5"
-pytest-asyncio = "^1.0.0a1"
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"

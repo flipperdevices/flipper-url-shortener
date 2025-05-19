@@ -1300,25 +1300,6 @@ pluggy = ">=1.5,<2"
 dev = ["argcomplete", "attrs (>=19.2)", "hypothesis (>=3.56)", "mock", "pygments (>=2.7.2)", "requests", "setuptools", "xmlschema"]
 
 [[package]]
-name = "pytest-asyncio"
-version = "1.0.0a1"
-description = "Pytest support for asyncio"
-optional = false
-python-versions = ">=3.9"
-groups = ["tests"]
-files = [
-    {file = "pytest_asyncio-1.0.0a1-py3-none-any.whl", hash = "sha256:aaf3a29d0f37f2408307c159376b2b52f8f185a89420a6cdc68eebe4002d6134"},
-    {file = "pytest_asyncio-1.0.0a1.tar.gz", hash = "sha256:c7b781096da23e618719168acb705c712d5b105ef66cf13e9da77d7868eef81b"},
-]
-
-[package.dependencies]
-pytest = ">=8.2,<9"
-
-[package.extras]
-docs = ["sphinx (>=5.3)", "sphinx-rtd-theme (>=1)"]
-testing = ["coverage (>=6.2)", "hypothesis (>=5.7.1)"]
-
-[[package]]
 name = "python-dateutil"
 version = "2.9.0.post0"
 description = "Extensions to the standard Python datetime module"
@@ -1682,4 +1663,4 @@ propcache = ">=0.2.1"
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.11"
-content-hash = "2f771c007a628f7bd623bf061657782c6d6bb613ba7def78504c8cddd47f3a69"
+content-hash = "a293bc625546a701e1e38ef150b8ebcc1f8ba5810c42df2a95cbb15a0e321f41"
