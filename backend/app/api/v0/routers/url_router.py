@@ -202,7 +202,7 @@ async def patch_short_url(
     data: UpdateUrlRequestSchema = Body(...),
     postgres_session: AsyncSession = Depends(get_postgres_session),
 ) -> None:
-    cleared_data = data.dict(exclude_unset=True)
+    cleared_data = data.model_dump(exclude_unset=True)
 
     if not cleared_data:
         raise HTTPException(

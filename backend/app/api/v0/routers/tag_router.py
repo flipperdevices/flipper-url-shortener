@@ -85,7 +85,7 @@ async def patch_tag(
     data: UpdateTagRequestSchema = Body(...),
     postgres_session: AsyncSession = Depends(get_postgres_session),
 ) -> None:
-    cleared_data = data.dict(exclude_unset=True)
+    cleared_data = data.model_dump(exclude_unset=True)
 
     if not cleared_data:
         raise HTTPException(
